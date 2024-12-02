@@ -8,6 +8,7 @@ public class EnemyStateMachine : MonoBehaviour
     void Start()
     {
         currentState = new WanderState(GetComponent<NavMeshAgent>());
+        currentState.InitState();
     }
 
     void Update()
