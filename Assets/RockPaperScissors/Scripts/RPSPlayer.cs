@@ -6,6 +6,7 @@ public class RPSPlayer : MonoBehaviour
 {
     Camera cam;
     NavMeshAgent agent;
+    Animator animator;
 
     [Header("Symbol properties")]
     [SerializeField]
@@ -18,6 +19,7 @@ public class RPSPlayer : MonoBehaviour
         cam = Camera.main;
         agent = GetComponent<NavMeshAgent>();
         symbol = GetComponent<RPSSymbol>();
+        animator = GetComponent<Animator>();
         StartCoroutine(ChangeSymbolRoutine());
     }
 
@@ -32,6 +34,8 @@ public class RPSPlayer : MonoBehaviour
 
     void Update()
     {
+        animator.SetFloat("Speed", agent.velocity.magnitude);
+
         if(Input.GetMouseButtonDown(0))
         {
             var ray = cam.ScreenPointToRay(Input.mousePosition);
