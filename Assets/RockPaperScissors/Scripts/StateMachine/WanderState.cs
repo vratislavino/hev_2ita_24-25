@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,6 +9,7 @@ public class WanderState : State
 
     public WanderState(NavMeshAgent agent) : base(agent)
     {
+        this.agent.speed = 3.5f;
     }
 
     public override void InitState()
@@ -60,7 +62,20 @@ public class WanderState : State
         
         if(other != null)
         {
-            return new AggroState(agent);
+            var wouldWin = symbol.CurrentSymbol.WouldWin(other.CurrentSymbol);
+            if(wouldWin.HasValue)
+            {
+                if(wouldWin.Value == true)
+                {
+                    return new AggroState(agent, other);
+                } else
+                {
+                    return new FleeState(agent, other);
+                }
+            } else
+            {
+                return this;
+            }
         }
         return this;
     }
