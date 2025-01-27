@@ -14,6 +14,11 @@ public class RPSCameraFollow : MonoBehaviour
 
     void Update()
     {
+        if (target == null)
+        {
+            enabled = false;
+            return;
+        }
         transform.position = target.position - offset;
     }
 }

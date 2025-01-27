@@ -10,11 +10,14 @@ public class FleeState : State
     {
         this.target = target;
         this.agent.speed = 2f;
+        Debug.Log("<color=red>I'm gonna leave your ass</color>");
     }
 
     public override void Process()
     {
-        Debug.Log("<color=red>I'm gonna leave your ass</color>");
+        if (target == null)
+            return;
+
         var dir = target.transform.position - agent.transform.position;
         dir *= -1;
         var newTarget = agent.transform.position + dir;
@@ -23,6 +26,8 @@ public class FleeState : State
 
     public override State TryToChangeState()
     {
+        if (target == null) return new WanderState(agent);
+
         var wouldWin = symbol.CurrentSymbol.WouldWin(target.CurrentSymbol);
         if (!wouldWin.HasValue)
         {
