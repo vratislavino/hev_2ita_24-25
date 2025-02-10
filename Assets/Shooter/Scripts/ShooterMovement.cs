@@ -10,6 +10,9 @@ public class ShooterMovement : MonoBehaviour
     private float speed = 5f;
 
     [SerializeField]
+    private float jumpForce = 1000f;
+
+    [SerializeField]
     private float mouseSensitivity = 1f;
 
     [SerializeField]
@@ -45,7 +48,7 @@ public class ShooterMovement : MonoBehaviour
 
     private void CheckGrounded()
     {
-        if(Physics.Raycast(groundCheck.position, Vector3.down, 0.03f))
+        if (Physics.Raycast(groundCheck.position, Vector3.down, out RaycastHit hit, 0.03f))
         {
             isGrounded = true;
         } else
@@ -72,11 +75,17 @@ public class ShooterMovement : MonoBehaviour
     {
         var horMove = Input.GetAxis("Horizontal");
         var verMove = Input.GetAxis("Vertical");
+        var jump = Input.GetButtonDown("Jump");
+
+        var tempVelocity = rb.linearVelocity.y;
+
+        if (jump && isGrounded)
+            tempVelocity = jumpForce;
 
         var movement = new Vector3(horMove, 0, verMove) * speed;
         var rotatedMovement = transform.rotation * movement;
-        
-        rotatedMovement.y = rb.linearVelocity.y;
+
+        rotatedMovement.y = tempVelocity;
 
         rb.linearVelocity = rotatedMovement;
     }
