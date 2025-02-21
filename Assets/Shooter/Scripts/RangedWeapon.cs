@@ -19,10 +19,10 @@ public class RangedWeapon : Weapon
     [SerializeField]
     protected Transform firePoint;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected virtual void Start()
     {
         currentAmmo = maxAmmo;
+        ShootInputMethod = Input.GetButtonDown;
     }
 
     public void Reload()
@@ -37,9 +37,11 @@ public class RangedWeapon : Weapon
         fireTimer = fireRate;
     }
 
-    protected void DoShoot() {
+    protected virtual void DoShoot() {
         var bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         bullet.AddForce(bullet.transform.forward * bulletSpeed, ForceMode.Impulse);
+    
+        Destroy(bullet.gameObject, 3f);
     }
 
     public override void Attack()

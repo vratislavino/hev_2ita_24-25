@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
@@ -6,9 +7,12 @@ public class Weapon : MonoBehaviour
     protected float fireRate = 0.1f;
     protected float fireTimer = 0f;
 
+    public Func<string, bool> ShootInputMethod;
+
     protected virtual void Update()
     {
         fireTimer -= Time.deltaTime;
+
     }
 
     public virtual bool CanAttack()
