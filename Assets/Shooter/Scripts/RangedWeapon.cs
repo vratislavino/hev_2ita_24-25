@@ -10,6 +10,9 @@ public class RangedWeapon : Weapon
     protected int maxAmmo = 7;
     protected int currentAmmo;
 
+    public override int Ammo => currentAmmo;
+    public override int MaxAmmo => maxAmmo;
+
     [SerializeField]
     protected Rigidbody bulletPrefab;
 

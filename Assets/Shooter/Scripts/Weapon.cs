@@ -9,6 +9,10 @@ public class Weapon : MonoBehaviour
 
     public Func<string, bool> ShootInputMethod;
 
+    public virtual int Ammo { get; }
+    public virtual int MaxAmmo { get; }
+
+
     protected virtual void Update()
     {
         fireTimer -= Time.deltaTime;
