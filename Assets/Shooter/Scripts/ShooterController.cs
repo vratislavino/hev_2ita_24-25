@@ -25,6 +25,11 @@ public class ShooterController : MonoBehaviour
             currentWeapon.Attack();
         }
 
+        if (Input.GetButtonDown("Reload"))
+        {
+            Debug.Log("Jsem tu!");
+            currentWeapon.Reload();
+        }
         if (Input.GetKeyDown(KeyCode.Alpha1))
             ChangeWeapon(weapons.ElementAt(0));
 
@@ -39,6 +44,8 @@ public class ShooterController : MonoBehaviour
     {
         if(currentWeapon)
         {
+            if (currentWeapon.IsReloading)
+                currentWeapon.Reload();
             currentWeapon.gameObject.SetActive(false);
         }
 

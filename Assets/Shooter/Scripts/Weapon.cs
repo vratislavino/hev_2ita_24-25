@@ -1,8 +1,11 @@
 using System;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+public abstract class Weapon : MonoBehaviour
 {
+    public event Action AmmoChanged;
+    public event Action<float> ReloadProgressChanged;
+
     [SerializeField]
     protected float fireRate = 0.1f;
     protected float fireTimer = 0f;
@@ -11,7 +14,19 @@ public class Weapon : MonoBehaviour
 
     public virtual int Ammo { get; }
     public virtual int MaxAmmo { get; }
+    public virtual bool IsReloading { get; }
+    protected void RaiseAmmoChanged()
+    {
+        AmmoChanged?.Invoke();
+    }
 
+    protected void RaiseReloadProgressChanged(float progress)
+    {
+        Debug.Log($"Progress: {progress}");
+        ReloadProgressChanged?.Invoke(progress);
+    }
+
+    public abstract void Reload();
 
     protected virtual void Update()
     {

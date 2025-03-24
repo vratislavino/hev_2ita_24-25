@@ -13,6 +13,8 @@ public class RangedWeapon : Weapon
     public override int Ammo => currentAmmo;
     public override int MaxAmmo => maxAmmo;
 
+    public override bool IsReloading => remainingReloadTime > 0;
+
     [SerializeField]
     protected Rigidbody bulletPrefab;
 
@@ -22,20 +24,49 @@ public class RangedWeapon : Weapon
     [SerializeField]
     protected Transform firePoint;
 
+    [SerializeField]
+    protected float reloadTime;
+    protected float remainingReloadTime;
+
     protected virtual void Start()
     {
-        currentAmmo = maxAmmo;
+        ChangeAmmo(maxAmmo);
         ShootInputMethod = Input.GetButtonDown;
     }
 
-    public void Reload()
+    public override void Reload()
     {
+        remainingReloadTime = reloadTime;
+        RaiseReloadProgressChanged(1);
+        Debug.Log($"Reloading {remainingReloadTime}");
+    }
 
+    protected override void Update()
+    {
+        base.Update();
+        if(remainingReloadTime > 0)
+        {
+            remainingReloadTime -= Time.deltaTime;
+            RaiseReloadProgressChanged(remainingReloadTime/reloadTime);
+            if(remainingReloadTime <= 0)
+            {
+                ChangeAmmo(maxAmmo);
+            }
+        }
+    }
+
+    protected void ChangeAmmo(int newVal)
+    {
+        currentAmmo = newVal;
+        RaiseAmmoChanged();
     }
 
     public void Shoot()
     {
-        currentAmmo--;
+        if (IsReloading)
+            return;
+
+        ChangeAmmo(currentAmmo - 1);
         DoShoot();
         fireTimer = fireRate;
     }
