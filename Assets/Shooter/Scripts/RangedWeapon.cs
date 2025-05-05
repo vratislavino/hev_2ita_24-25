@@ -67,6 +67,11 @@ public class RangedWeapon : Weapon
             return;
 
         ChangeAmmo(currentAmmo - 1);
+        if (currentAmmo == 0)
+        {
+            Reload();
+            return;
+        }
         DoShoot();
         fireTimer = fireRate;
     }

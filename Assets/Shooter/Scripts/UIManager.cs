@@ -30,11 +30,25 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private ShooterController shooterController;
 
+    [SerializeField]
+    private TMP_Text scoreText;
+
+    [SerializeField]
+    private ShooterTargetSpawner spawner;
+
+
     void Awake()
     {
+        spawner.PointsChanged += OnPointsChanged;
         shooterController.WeaponChanged += OnWeaponChanged;
         normalCrosshair.SetActive(true);
         reloadCrosshair.SetActive(false);
+    }
+
+    private void OnPointsChanged(int points)
+    {
+        Debug.Log(points);
+        scoreText.text = points.ToString();
     }
 
     private void OnWeaponChanged(Weapon oldW, Weapon newW)

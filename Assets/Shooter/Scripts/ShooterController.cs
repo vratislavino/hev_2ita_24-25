@@ -11,6 +11,9 @@ public class ShooterController : MonoBehaviour
     Weapon currentWeapon;
     public Weapon CurrentWeapon => currentWeapon;
 
+    [SerializeField]
+    private Grenade grenadePrefab;
+
     void Start()
     {
         weapons = GetComponentsInChildren<Weapon>(true).ToList();
@@ -23,6 +26,11 @@ public class ShooterController : MonoBehaviour
         if(currentWeapon.ShootInputMethod("Fire1"))
         {
             currentWeapon.Attack();
+        }
+
+        if(Input.GetKeyDown(KeyCode.G))
+        {
+            ThrowGrenade();
         }
 
         if (Input.GetButtonDown("Reload"))
@@ -38,6 +46,14 @@ public class ShooterController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
             ChangeWeapon(weapons.ElementAt(2));
+    }
+
+    private void ThrowGrenade()
+    {
+        var pos = transform.position + transform.forward;
+        var grenade = Instantiate(grenadePrefab, pos, transform.rotation);
+        grenade.GetComponent<Rigidbody>()
+            .AddForce(grenade.transform.forward * 10, ForceMode.Impulse);
     }
 
     private void ChangeWeapon(Weapon newWeapon)
